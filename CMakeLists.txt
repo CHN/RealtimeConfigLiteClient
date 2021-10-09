@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 
 project(RealtimeConfigLiteClient VERSION 0.1)
 
+#### DEFINITIONS
+
+add_compile_definitions(RTCL_ENABLED)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Build/")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Build/Libraries/")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Build/Binaries/")
