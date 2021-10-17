@@ -1,3 +1,3 @@
-project(Macros)
+project(Core)
 
 CreateTarget(${PROJECT_NAME} LIBRARY)
