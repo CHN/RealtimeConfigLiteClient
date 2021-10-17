@@ -1,21 +1,39 @@
 #pragma once
 
+#include "../Private/Bridge.h"
+
 #ifdef RTCL_ENABLED
 
-#define RTCL_VARIABLE(...)
+#define RTCL_ADD_TYPE_SCOPE(...)
 
-#define RTCL_UPDATE_BLOCK(functionBody) \
+#define RTCL_ADD_VAR_SCOPE(...)
+
+#define RTCL_ADD_VAR(...)
+
+#define RTCL_ADD_CALLBACK_BLOCK(functionBody) \
 \
 	functionBody \
 
-#define RTCL_DESTRUCTOR()
+#define RTCL_END_SCOPE()
+
+#define RTCL_END_ALL_SCOPES()
+
+#define RTCL_DESTRUCTOR(scope)
 
 #else
 
-#define RTCL_VARIABLE(...)
+#define RTCL_ADD_TYPE_SCOPE(...)
 
-#define RTCL_UPDATE_BLOCK(functionBody) functionBody
+#define RTCL_ADD_VAR_SCOPE(...)
 
-#define RTCL_DESTRUCTOR()
+#define RTCL_ADD_VAR(...)
+
+#define RTCL_ADD_CALLBACK_BLOCK(functionBody) 
+
+#define RTCL_END_SCOPE()
+
+#define RTCL_END_ALL_SCOPES()
+
+#define RTCL_DESTRUCTOR(scope)
 
 #endif // RTCL_ENABLED
