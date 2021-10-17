@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+// TESTING PURPOSES, ENTRY POINT SHOULD BE CALLED FROM TARGET APP
+
 #include <windows.h>
 
 int main()
