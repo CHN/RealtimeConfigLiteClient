@@ -1,0 +1,3 @@
+[submodule "Source/Shared"]
+	path = Source/Shared
+	url = https://github.com/CHN/RealtimeConfigLiteShared.git
