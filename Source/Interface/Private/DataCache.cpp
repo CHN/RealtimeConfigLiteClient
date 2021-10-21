@@ -67,6 +67,7 @@ void RTCL::DataCache::EndAllScopes()
 	// add asserts
 
 	currentScopeHierarchy.clear();
+	currentScope.reset();
 }
 
 // TEST: Only for testing purposes, so not optimized and cleaned
