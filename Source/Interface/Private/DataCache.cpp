@@ -10,40 +10,39 @@ RTCL::DataCache::DataCache()
 
 void RTCL::DataCache::AddScope(const std::string& scope)
 {
-	if (currentScopeHierarchy.empty())
-	{
-		dataCache.emplace_back();
+	auto* newScope = new DataScope();
+	newScope->parent = currentScope;
+	newScope->scope = scope;
 
-		++parentScopeCount;
+	std::shared_ptr<DataScope> newScopeSharedPtr(newScope);
+
+	if (currentScope.expired())
+	{
+		dataCache.emplace_back(newScopeSharedPtr);
+	}
+	else
+	{
+		currentScope.lock()->children.emplace_back(newScopeSharedPtr);
 	}
 
-	auto& currentScopeVector = dataCache[parentScopeCount - 1];
-
-	++currentActiveScopeCount;
-
-	DataScope newScope;
-	newScope.scope = scope;
-	newScope.depth = currentActiveScopeCount - 1;
-	currentScopeVector.emplace(currentScopeVector.begin() + (currentActiveScopeCount - 1), std::move(newScope));
-
-	currentScope = &currentScopeVector[currentActiveScopeCount - 1]; // TODO: CHECK: It can be a bad idea to cache address of a vector element.
+	currentScope = newScopeSharedPtr;
 
 	currentScopeHierarchy.push_back(scope);
 }
 
 void RTCL::DataCache::AddOnUpdateCallbackToCurrentScope(const std::function<OnUpdateCallbackType>& callback)
 {
-	currentScope->onUpdateCallbacks.push_back(callback);
+	currentScope.lock()->onUpdateCallbacks.push_back(callback);
 }
 
 void RTCL::DataCache::AddPointerToCurrentScope(void* pointer, SerializedType type)
 {
-	currentScope->pointerVectorMap[type].push_back(pointer);
+	currentScope.lock()->pointerVectorMap[type].push_back(pointer);
 }
 
 void RTCL::DataCache::AddPointerListToCurrentScope(const std::vector<void*>& pointers, SerializedType type)
 {
-	auto& pointerVector = currentScope->pointerVectorMap[type];
+	auto& pointerVector = currentScope.lock()->pointerVectorMap[type];
 	pointerVector.insert(pointerVector.end(), pointers.begin(), pointers.end());
 }
 
@@ -51,17 +50,15 @@ void RTCL::DataCache::EndScope()
 {
 	// add asserts
 
-	--currentActiveScopeCount;
-
 	currentScopeHierarchy.pop_back();
 
 	if (currentScopeHierarchy.empty())
 	{
-		currentScope = nullptr;
+		currentScope.reset();
 	}
 	else
 	{
-		currentScope = &dataCache[parentScopeCount - 1][currentActiveScopeCount - 1];
+		currentScope = currentScope.lock()->parent;
 	}
 }
 
@@ -69,56 +66,46 @@ void RTCL::DataCache::EndAllScopes()
 {
 	// add asserts
 
-	currentActiveScopeCount = 0;
 	currentScopeHierarchy.clear();
-
-	currentScope = nullptr;
 }
 
+// TEST: Only for testing purposes, so not optimized and cleaned
 void RTCL::DataCache::PrintData()
 {
-	for (int pI = 0; pI < dataCache.size(); ++pI)
+	PrintDataInternal(dataCache.front().get(), 0);
+}
+
+// TEST: Only for testing purposes, so not optimized and cleaned
+void RTCL::DataCache::PrintDataInternal(DataScope* scope, int indent)
+{
+	PrintIndent(indent);
+	std::cout << "Scope: " << scope->scope << std::endl;
+
+	for (const auto& ptrPair : scope->pointerVectorMap)
 	{
-		std::cout << "Parent Scope: " << pI << std::endl;
+		PrintIndent(indent + 1);
+		std::cout << "Type: " << static_cast<int>(ptrPair.first) << std::endl;
 
-		int indent = 1;
-
-		for (const auto& scope : dataCache[pI])
+		for (const auto* ptr : ptrPair.second)
 		{
-			std::cout << std::endl;
-
-			int indent2 = indent + scope.depth;
-
-			for (int i = 0; i < indent2; ++i)
-			{
-				std::cout << "\t";
-			}
-
-			std::cout << "Scope: " << scope.scope << std::endl;
-
-			++indent2;
-
-			for (const auto& ptrPair : scope.pointerVectorMap)
-			{
-				for (int i = 0; i < indent2; ++i)
-				{
-					std::cout << "\t";
-				}
-
-				std::cout << "Type: " << static_cast<int>(ptrPair.first) << std::endl;
-
-				for (void* ptr : ptrPair.second)
-				{
-					for (int i = 0; i < indent2 + 1; ++i)
-					{
-						std::cout << "\t";
-					}
-
-					std::cout << "Pointer: " << (unsigned long long)ptr << std::endl;
-				}
-			}
+			PrintIndent(indent + 2);
+			std::cout << "Pointer: " << (unsigned long long)ptr << std::endl;
 		}
+	}
 
-		std::cout << std::endl;
+	std::cout << std::endl;
+
+	for (auto& child : scope->children)
+	{
+		PrintDataInternal(child.get(), indent + 3);
+	}
+}
+
+// TEST: Only for testing purposes, so not optimized and cleaned
+void RTCL::DataCache::PrintIndent(int indent)
+{
+	for (int i = 0; i < indent; ++i)
+	{
+		std::cout << "\t";
 	}
 }

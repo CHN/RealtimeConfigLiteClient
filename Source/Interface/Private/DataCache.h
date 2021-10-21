@@ -7,6 +7,7 @@
 #include <map>
 #include <functional>
 #include <cstdint>
+#include <memory>
 
 namespace RTCL
 {
@@ -25,7 +26,8 @@ namespace RTCL
 		void EndScope();
 		void EndAllScopes();
 
-		void PrintData();
+		void PrintData(); // TEST: Only for testing purposes, so not optimized and cleaned
+
 	private:
 		
 		static constexpr size_t preAllocatedDataCacheSize = 100;
@@ -33,22 +35,25 @@ namespace RTCL
 
 		using PointerListMapType = std::map<SerializedType, std::vector<void*>>;
 
+		struct DataScope;
+
+		using DataScopeVectorType = std::vector<std::shared_ptr<DataScope>>;
+
 		struct DataScope
 		{
-			int depth = 0; // TODO: Should be replaced with nested vectors for nested scopes
+			DataScopeVectorType children;
+			std::weak_ptr<DataScope> parent;
 			std::string scope;
 			std::vector<std::function<OnUpdateCallbackType>> onUpdateCallbacks;
 			PointerListMapType pointerVectorMap;
 		};
 
-		using DataScopeVectorType = std::vector<DataScope>;
+		DataScopeVectorType dataCache;
 
-		size_t parentScopeCount = 0;
-		size_t currentActiveScopeCount = 0;
-
-		std::vector<DataScopeVectorType> dataCache;
 		std::vector<std::string> currentScopeHierarchy;
+		std::weak_ptr<DataScope> currentScope;
 
-		DataScope* currentScope = nullptr;
+		void PrintDataInternal(DataScope* scope, int indent); // TEST: Only for testing purposes, so not optimized and cleaned
+		void PrintIndent(int indent); // TEST: Only for testing purposes, so not optimized and cleaned
 	};
 }
