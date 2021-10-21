@@ -10,6 +10,43 @@
 
 int main()
 {
+	RTCL_ADD_TYPE_SCOPE("inner1");
+	int x = 42; const char* y = "test";
+	RTCL_ADD_VAR(&x, &y);
+
+		RTCL_ADD_TYPE_SCOPE("inner11");
+		RTCL_ADD_VAR(&x, &y);
+
+			RTCL_ADD_TYPE_SCOPE("inner111");
+			RTCL_ADD_VAR(&x, &y);
+			RTCL_END_SCOPE();
+
+			RTCL_ADD_TYPE_SCOPE("inner112");
+			RTCL_ADD_VAR(&x, &y);
+			RTCL_END_SCOPE();
+
+		RTCL_END_SCOPE();
+
+		RTCL_ADD_TYPE_SCOPE("inner12");
+		RTCL_ADD_VAR(&x, &y);
+
+			RTCL_ADD_TYPE_SCOPE("inner121");
+			RTCL_ADD_VAR(&x, &y);
+
+				RTCL_ADD_TYPE_SCOPE("inner1211");
+				RTCL_ADD_VAR(&x, &y);
+				RTCL_END_SCOPE();
+
+			RTCL_END_SCOPE();
+
+		RTCL_END_SCOPE();
+
+	RTCL_END_SCOPE();
+
+	RTCL::Bridge::PrintData();
+
+	return 0;
+
 	ConfigClient cc;
 	cc.ConnectToServer("localhost", "5555");
 	
