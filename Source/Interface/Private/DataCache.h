@@ -19,7 +19,7 @@ namespace RTCL
 
 		DataCache();
 
-		void AddScope(const std::string& scope);
+		void AddScope(const std::string& scopeName);
 		void AddOnUpdateCallbackToCurrentScope(const std::function<OnUpdateCallbackType>& callback);
 		void AddPointerToCurrentScope(void* pointer, RTCL::SerializedType type);
 		void AddPointerListToCurrentScope(const std::vector<void*>& pointers, SerializedType type);
@@ -43,7 +43,7 @@ namespace RTCL
 		{
 			DataScopeVectorType children;
 			std::weak_ptr<DataScope> parent;
-			std::string scope;
+			std::string name;
 			std::vector<std::function<OnUpdateCallbackType>> onUpdateCallbacks;
 			PointerListMapType pointerVectorMap;
 		};

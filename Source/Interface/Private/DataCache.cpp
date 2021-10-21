@@ -8,11 +8,11 @@ RTCL::DataCache::DataCache()
 	dataCache.reserve(preAllocatedDataCacheSize);
 }
 
-void RTCL::DataCache::AddScope(const std::string& scope)
+void RTCL::DataCache::AddScope(const std::string& scopeName)
 {
 	std::shared_ptr<DataScope> newScope = std::make_shared<DataScope>();
 	newScope->parent = currentScope;
-	newScope->scope = scope;
+	newScope->name = scopeName;
 
 	if (currentScope.expired())
 	{
@@ -69,7 +69,7 @@ void RTCL::DataCache::PrintData()
 void RTCL::DataCache::PrintDataInternal(DataScope* scope, int indent)
 {
 	PrintIndent(indent);
-	std::cout << "Scope: " << scope->scope << std::endl;
+	std::cout << "Scope: " << scope->name << std::endl;
 
 	for (const auto& ptrPair : scope->pointerVectorMap)
 	{
