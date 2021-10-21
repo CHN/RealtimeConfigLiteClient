@@ -10,22 +10,20 @@ RTCL::DataCache::DataCache()
 
 void RTCL::DataCache::AddScope(const std::string& scope)
 {
-	auto* newScope = new DataScope();
+	std::shared_ptr<DataScope> newScope = std::make_shared<DataScope>();
 	newScope->parent = currentScope;
 	newScope->scope = scope;
 
-	std::shared_ptr<DataScope> newScopeSharedPtr(newScope);
-
 	if (currentScope.expired())
 	{
-		dataCache.emplace_back(newScopeSharedPtr);
+		dataCache.emplace_back(newScope);
 	}
 	else
 	{
-		currentScope.lock()->children.emplace_back(newScopeSharedPtr);
+		currentScope.lock()->children.emplace_back(newScope);
 	}
 
-	currentScope = newScopeSharedPtr;
+	currentScope = newScope;
 }
 
 void RTCL::DataCache::AddOnUpdateCallbackToCurrentScope(const std::function<OnUpdateCallbackType>& callback)
