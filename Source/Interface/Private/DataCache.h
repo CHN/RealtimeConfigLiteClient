@@ -35,7 +35,7 @@ namespace RTCL
 
 		struct DataScope
 		{
-			int depth = 0;
+			int depth = 0; // TODO: Should be replaced with nested vectors for nested scopes
 			std::string scope;
 			std::vector<std::function<OnUpdateCallbackType>> onUpdateCallbacks;
 			PointerListMapType pointerVectorMap;
