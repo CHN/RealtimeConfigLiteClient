@@ -37,6 +37,10 @@ int main()
 				RTCL_ADD_VAR(&x, &y);
 				RTCL_END_SCOPE();
 
+				RTCL_ADD_TYPE_SCOPE("inner1212");
+				RTCL_ADD_VAR(&x, &y);
+				RTCL_END_SCOPE();
+
 			RTCL_END_SCOPE();
 
 		RTCL_END_SCOPE();
