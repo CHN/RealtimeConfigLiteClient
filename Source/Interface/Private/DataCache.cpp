@@ -72,7 +72,10 @@ void RTCL::DataCache::EndAllScopes()
 // TEST: Only for testing purposes, so not optimized and cleaned
 void RTCL::DataCache::PrintData()
 {
-	PrintDataInternal(dataCache.front().get(), 0);
+	for (auto& parent : dataCache)
+	{
+		PrintDataInternal(parent.get(), 0);
+	}
 }
 
 // TEST: Only for testing purposes, so not optimized and cleaned
