@@ -50,7 +50,6 @@ namespace RTCL
 
 		DataScopeVectorType dataCache;
 
-		std::vector<std::string> currentScopeHierarchy;
 		std::weak_ptr<DataScope> currentScope;
 
 		void PrintDataInternal(DataScope* scope, int indent); // TEST: Only for testing purposes, so not optimized and cleaned

@@ -26,8 +26,6 @@ void RTCL::DataCache::AddScope(const std::string& scope)
 	}
 
 	currentScope = newScopeSharedPtr;
-
-	currentScopeHierarchy.push_back(scope);
 }
 
 void RTCL::DataCache::AddOnUpdateCallbackToCurrentScope(const std::function<OnUpdateCallbackType>& callback)
@@ -50,23 +48,13 @@ void RTCL::DataCache::EndScope()
 {
 	// add asserts
 
-	currentScopeHierarchy.pop_back();
-
-	if (currentScopeHierarchy.empty())
-	{
-		currentScope.reset();
-	}
-	else
-	{
-		currentScope = currentScope.lock()->parent;
-	}
+	currentScope = currentScope.lock()->parent;
 }
 
 void RTCL::DataCache::EndAllScopes()
 {
 	// add asserts
 
-	currentScopeHierarchy.clear();
 	currentScope.reset();
 }
 
