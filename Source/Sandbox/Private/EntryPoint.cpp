@@ -1,7 +1,6 @@
 #include "Macros.h"
 #include "ConfigClient.h"
 
-
 #include <iostream>
 
 // TESTING PURPOSES, ENTRY POINT SHOULD BE CALLED FROM TARGET APP
@@ -11,7 +10,7 @@
 int main()
 {
 	RTCL_ADD_TYPE_SCOPE("inner1");
-	int x = 42; const char* y = "test";
+	int x = 256; const char* y = "test";
 	RTCL_ADD_VAR(&x, &y);
 
 		RTCL_ADD_TYPE_SCOPE("inner11");
