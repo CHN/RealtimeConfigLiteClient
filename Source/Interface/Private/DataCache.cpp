@@ -1,7 +1,10 @@
 #include "DataCache.h"
 
+#include "Serializer.h"
+
 #include <memory>
 #include <iostream>
+#include <algorithm>
 
 RTCL::DataCache::DataCache()
 {
@@ -76,16 +79,28 @@ void RTCL::DataCache::PrintDataInternal(DataScope* scope, int indent)
 		PrintIndent(indent + 1);
 		std::cout << "Type: " << static_cast<int>(ptrPair.first) << std::endl;
 
-		for (const auto* ptr : ptrPair.second)
+		for (auto* ptr : ptrPair.second)
 		{
 			PrintIndent(indent + 2);
 			std::cout << "Pointer: " << (unsigned long long)ptr << std::endl;
+
+			PrintIndent(indent + 2);
+			std::cout << "Serialized Value: ";
+
+			auto serializedValue = Serializer::SerializeByEnumType(ptrPair.first, ptr);
+
+			std::for_each(serializedValue.begin(), serializedValue.end(), [](char value)
+				{
+					std::cout << (int)value << "/";
+				});
+
+			std::cout << std::endl;
 		}
 	}
 
 	std::cout << std::endl;
 
-	for (auto& child : scope->children)
+	for (const auto& child : scope->children)
 	{
 		PrintDataInternal(child.get(), indent + 3);
 	}
