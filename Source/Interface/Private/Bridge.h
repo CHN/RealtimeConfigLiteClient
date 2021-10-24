@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DataCache.h"
+#include "SerializedTypeSelector.h"
 
 #include <vector>
 #include <string>
@@ -37,7 +38,7 @@ namespace RTCL
 		template<typename VariableType>
 		static void AddVarInternal(VariableType variable)
 		{
-			dataCache.AddPointerToCurrentScope(variable, SerializedType::kInt);
+			dataCache.AddPointerToCurrentScope(variable, SerializedTypeSelector<VariableType>::type);
 		}
 
 		static DataCache dataCache; // TODO: Consider rename this to data cache manager, if it suits
