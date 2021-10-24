@@ -17,8 +17,6 @@ namespace RTCL
 
 		using OnUpdateCallbackType = void();
 
-		DataCache();
-
 		void AddScope(const std::string& scopeName);
 		void AddOnUpdateCallbackToCurrentScope(const std::function<OnUpdateCallbackType>& callback);
 		void AddPointerToCurrentScope(void* pointer, RTCL::SerializedType type);
@@ -29,9 +27,6 @@ namespace RTCL
 		void PrintData(); // TEST: Only for testing purposes, so not optimized and cleaned
 
 	private:
-		
-		static constexpr size_t preAllocatedDataCacheSize = 100;
-		static constexpr size_t nestedScopeMaxCount = 1000; // TODO: Not considered up to now
 
 		using PointerListMapType = std::map<SerializedType, std::vector<void*>>;
 

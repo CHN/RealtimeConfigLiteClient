@@ -6,11 +6,6 @@
 #include <iostream>
 #include <algorithm>
 
-RTCL::DataCache::DataCache()
-{
-	dataCache.reserve(preAllocatedDataCacheSize);
-}
-
 void RTCL::DataCache::AddScope(const std::string& scopeName)
 {
 	std::shared_ptr<DataScope> newScope = std::make_shared<DataScope>();
