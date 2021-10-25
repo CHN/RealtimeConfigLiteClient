@@ -1,7 +1,5 @@
 #include "Bridge.h"
 
-#include <cassert>
-
 RTCL::DataCache RTCL::Bridge::dataCache;
 
 void RTCL::Bridge::AddScope(const std::string& scope)
