@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Private/Bridge.h"
+#include "Bridge.h"
 
 #ifdef RTCL_ENABLED
 

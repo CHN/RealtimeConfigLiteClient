@@ -46,8 +46,6 @@ int main()
 
 	RTCL_END_SCOPE();
 
-	RTCL::Bridge::PrintData();
-
 	return 0;
 
 	ConfigClient cc;

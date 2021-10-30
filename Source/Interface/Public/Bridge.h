@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DataCache.h"
 #include "SerializedTypeSelector.h"
 
 #include <vector>
 #include <string>
+#include <functional>
 
 namespace RTCL
 {
@@ -27,20 +27,16 @@ namespace RTCL
 			AddVarInternal(variable);
 		}
 
-		static void AddOnUpdateCallback(const std::function<DataCache::OnUpdateCallbackType>& callback);
+		static void AddOnUpdateCallback(const std::function<void()>& callback);
 		static void EndScope();
 		static void EndAllScopes();
-
-		static void PrintData();
 
 	private:
 
 		template<typename VariableType>
 		static void AddVarInternal(VariableType variable)
 		{
-			dataCache.AddPointerToCurrentScope(variable, SerializedTypeSelector<VariableType>::type);
+			
 		}
-
-		static DataCache dataCache; // TODO: Consider rename this to data cache manager, if it suits
 	};
 }
